@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>盈缺 — 我的第一个网页</title>
+  <style>
+    :root {
+      --bg: #fbfbfd;
+      --text: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --link: #0066cc;
+      --nav-height: 44px;
+      --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+        "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* —— 导航 —— */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background: rgba(251, 251, 253, 0.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 28px;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      opacity: 0.88;
+      transition: opacity 0.3s var(--ease);
+    }
+
+    nav a:hover {
+      opacity: 1;
+    }
+
+    nav .logo {
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    /* —— Hero —— */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: calc(var(--nav-height) + 48px) 24px 80px;
+      background: linear-gradient(180deg, #f5f5f7 0%, var(--bg) 60%);
+    }
+
+    .hero-eyebrow {
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: 0.011em;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 1s var(--ease) 0.2s forwards;
+    }
+
+    .hero h1 {
+      font-size: clamp(48px, 10vw, 96px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fadeUp 1s var(--ease) 0.35s forwards;
+    }
+
+    .hero .tagline {
+      font-size: clamp(21px, 3vw, 28px);
+      font-weight: 400;
+      letter-spacing: 0.004em;
+      color: var(--text-secondary);
+      max-width: 520px;
+      line-height: 1.4;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 1s var(--ease) 0.5s forwards;
+    }
+
+    .cta-links {
+      display: flex;
+      gap: 28px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 1s var(--ease) 0.65s forwards;
+    }
+
+    .cta-links a {
+      font-size: 21px;
+      color: var(--link);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.3s var(--ease);
+    }
+
+    .cta-links a:hover {
+      text-decoration: underline;
+    }
+
+    .cta-links a::after {
+      content: "›";
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    /* —— 区块卡片（Apple 产品网格风格）—— */
+    .sections {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 22px 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card {
+      border-radius: 18px;
+      overflow: hidden;
+      text-align: center;
+      padding: 56px 40px 64px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-light {
+      background: #fff;
+    }
+
+    .card-dark {
+      background: #000;
+      color: #f5f5f7;
+    }
+
+    .card-gradient {
+      background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #f5f5f7;
+    }
+
+    .card-warm {
+      background: linear-gradient(160deg, #faf6f0 0%, #f0ebe3 100%);
+    }
+
+    .card-eyebrow {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      margin-bottom: 6px;
+    }
+
+    .card h2 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      font-size: 19px;
+      line-height: 1.47;
+      color: var(--text-secondary);
+      max-width: 480px;
+      margin: 0 auto 20px;
+    }
+
+    .card-dark p,
+    .card-gradient p {
+      color: #a1a1a6;
+    }
+
+    .card-link {
+      font-size: 17px;
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    .card-dark .card-link,
+    .card-gradient .card-link {
+      color: #2997ff;
+    }
+
+    .card-link:hover {
+      text-decoration: underline;
+    }
+
+    /* 兴趣标签 */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 28px;
+    }
+
+    .tag {
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 18px;
+      border-radius: 980px;
+      background: rgba(0, 0, 0, 0.06);
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .card-dark .tag,
+    .card-gradient .tag {
+      background: rgba(255, 255, 255, 0.12);
+      color: #f5f5f7;
+    }
+
+    /* —— 点赞按钮 —— */
+    .like-section {
+      text-align: center;
+      padding: 80px 24px 120px;
+    }
+
+    .like-section p {
+      font-size: 21px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      letter-spacing: 0.004em;
+    }
+
+    .like-btn {
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 400;
+      color: #fff;
+      background: var(--link);
+      border: none;
+      padding: 12px 28px;
+      border-radius: 980px;
+      cursor: pointer;
+      transition: background 0.3s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .like-btn:hover {
+      background: #0077ed;
+    }
+
+    .like-btn:active {
+      transform: scale(0.97);
+    }
+
+    .like-btn.liked {
+      background: #34c759;
+    }
+
+    .like-count {
+      display: block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      min-height: 20px;
+    }
+
+    /* —— 页脚 —— */
+    footer {
+      background: #f5f5f7;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 24px 22px 32px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    footer .inner {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    footer .divider {
+      height: 1px;
+      background: rgba(0, 0, 0, 0.08);
+      margin: 16px 0;
+    }
+
+    footer .copyright {
+      color: #86868b;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 734px) {
+      nav ul {
+        gap: 16px;
+        font-size: 11px;
+      }
+
+      .card {
+        padding: 44px 24px 52px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <ul>
+      <li><a href="#" class="logo">盈缺</a></li>
+      <li><a href="#about">关于</a></li>
+      <li><a href="#interests">兴趣</a></li>
+      <li><a href="#story">故事</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <p class="hero-eyebrow">全新登场</p>
+    <h1>你好，我是盈缺。</h1>
+    <p class="tagline">这是我做的第一个网页。没有任何程序员经验——全靠 AI 一起完成。</p>
+    <div class="cta-links">
+      <a href="#about">了解更多</a>
+      <a href="#interests">探索兴趣</a>
+    </div>
+  </header>
+
+  <main class="sections">
+    <article id="about" class="card card-light">
+      <p class="card-eyebrow">关于我</p>
+      <h2>从零开始，<br>但已经出发。</h2>
+      <p>每一个伟大的产品，都始于一个简单的想法。这个网页就是我的第一步——简洁、专注、恰到好处。</p>
+      <a href="#story" class="card-link">阅读我的故事 ›</a>
+    </article>
+
+    <article id="interests" class="card card-gradient">
+      <p class="card-eyebrow">我的兴趣</p>
+      <h2>热爱，<br>定义了我。</h2>
+      <p>生活不止于屏幕。这些是我真正在意的事情。</p>
+      <div class="tags">
+        <span class="tag">摄影</span>
+        <span class="tag">摩托车</span>
+        <span class="tag">白丝</span>
+      </div>
+    </article>
+
+    <article id="story" class="card card-dark">
+      <p class="card-eyebrow">幕后故事</p>
+      <h2>AI 助力，<br>人类创造。</h2>
+      <p>我没有写过一行传统意义上的代码，但我和 AI 一起，把脑海里的画面变成了你正在看的这个页面。这就是创作的未来。</p>
+    </article>
+
+    <article class="card card-warm">
+      <p class="card-eyebrow">接下来</p>
+      <h2>更多可能，<br>敬请期待。</h2>
+      <p>这只是开始。下一个版本，也许会加入照片集、骑行日记，或者更多意想不到的内容。</p>
+    </article>
+  </main>
+
+  <section class="like-section">
+    <p>喜欢这个页面？</p>
+    <button class="like-btn" id="likeBtn">给你点赞</button>
+    <span class="like-count" id="likeCount"></span>
+  </section>
+
+  <footer>
+    <div class="inner">
+      <p>Copyright © 2026 盈缺。保留所有权利。</p>
+      <div class="divider"></div>
+      <p class="copyright">用好奇心与 AI 制作 · 中国</p>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    var cards = document.querySelectorAll(".card");
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+    );
+    cards.forEach(function (card) {
+      observer.observe(card);
+    });
+
+    var btn = document.getElementById("likeBtn");
+    var countEl = document.getElementById("likeCount");
+    var count = 0;
+    var liked = false;
+
+    btn.addEventListener("click", function () {
+      if (!liked) {
+        liked = true;
+        count += 1;
+        btn.textContent = "已点赞";
+        btn.classList.add("liked");
+      } else {
+        liked = false;
+        count = Math.max(0, count - 1);
+        btn.textContent = "给你点赞";
+        btn.classList.remove("liked");
+      }
+      countEl.textContent = count > 0 ? count + " 人觉得很赞" : "";
+    });
+  })();
+  </script>
+</body>
+</html>

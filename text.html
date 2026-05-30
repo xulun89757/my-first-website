@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh">
+<body>
+
+  <button id="myBtn">点一下</button>
+  <p id="text">等待中……</p>
+
+  <script>
+    var myBtn = document.getElementById("myBtn");
+
+    myBtn.addEventListener("click", function () {
+      document.getElementById("text").textContent = "按钮被按下了！";
+    });
+  </script>
+
+</body>
+</html>

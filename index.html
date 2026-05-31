@@ -261,6 +261,233 @@
       color: #f5f5f7;
     }
 
+    /* —— 摄影预约意向 —— */
+    .booking-form {
+      max-width: 420px;
+      margin: 28px auto 0;
+      text-align: left;
+    }
+
+    .booking-field {
+      margin-bottom: 16px;
+    }
+
+    .booking-field:last-child {
+      margin-bottom: 0;
+    }
+
+    .booking-field label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .booking-field input,
+    .booking-field textarea {
+      width: 100%;
+      font-family: inherit;
+      font-size: 17px;
+      padding: 12px 16px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.03);
+      color: var(--text);
+      transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+    }
+
+    .booking-field input:focus,
+    .booking-field textarea:focus {
+      outline: none;
+      border-color: rgba(0, 102, 204, 0.35);
+      background: #fff;
+    }
+
+    .booking-field textarea {
+      min-height: 100px;
+      resize: vertical;
+      line-height: 1.47;
+    }
+
+    .booking-field input::placeholder,
+    .booking-field textarea::placeholder {
+      color: #86868b;
+    }
+
+    /* 校验错误：柔和红框 + 提示文字 */
+    .booking-field.is-error input,
+    .booking-field.is-error textarea {
+      border-color: rgba(181, 98, 98, 0.55);
+      background: rgba(181, 98, 98, 0.04);
+    }
+
+    .booking-field.is-error input:focus,
+    .booking-field.is-error textarea:focus {
+      border-color: rgba(181, 98, 98, 0.7);
+      background: #fff;
+    }
+
+    .booking-error {
+      display: none;
+      margin-top: 6px;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #b07d7d;
+      letter-spacing: -0.01em;
+    }
+
+    .booking-field.is-error .booking-error {
+      display: block;
+    }
+
+    /* 校验错误：输入框轻微左右抖动 */
+    .booking-field.is-shake input,
+    .booking-field.is-shake textarea {
+      animation: bookingShake 0.45s var(--ease);
+    }
+
+    @keyframes bookingShake {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+      20% {
+        transform: translateX(-6px);
+      }
+      40% {
+        transform: translateX(6px);
+      }
+      60% {
+        transform: translateX(-4px);
+      }
+      80% {
+        transform: translateX(4px);
+      }
+    }
+
+    .booking-submit-wrap {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .booking-submit {
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 400;
+      color: #fff;
+      background: #6889a8;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 980px;
+      cursor: pointer;
+      transition: background 0.3s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .booking-submit:hover {
+      background: #5d7f9d;
+    }
+
+    .booking-submit:active {
+      transform: scale(0.97);
+    }
+
+    /* —— 预约成功弹窗（Modal）—— */
+    .booking-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s var(--ease), visibility 0.35s var(--ease);
+    }
+
+    .booking-modal.is-open {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .booking-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.32);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .booking-modal-dialog {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      padding: 36px 28px 24px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.16);
+      text-align: center;
+      transform: scale(0.96) translateY(8px);
+      transition: transform 0.35s var(--ease);
+    }
+
+    .booking-modal.is-open .booking-modal-dialog {
+      transform: scale(1) translateY(0);
+    }
+
+    .booking-modal-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: rgba(107, 149, 128, 0.14);
+      color: #6b9580;
+      font-size: 26px;
+      font-weight: 600;
+      line-height: 52px;
+    }
+
+    .booking-modal-title {
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .booking-modal-message {
+      font-size: 15px;
+      line-height: 1.47;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .booking-modal-btn {
+      width: 100%;
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 400;
+      color: #fff;
+      background: #6889a8;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 980px;
+      cursor: pointer;
+      transition: background 0.3s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .booking-modal-btn:hover {
+      background: #5d7f9d;
+    }
+
+    .booking-modal-btn:active {
+      transform: scale(0.98);
+    }
+
     /* —— 点赞 / 点踩 —— */
     .like-section {
       text-align: center;
@@ -565,6 +792,49 @@
     </article>
   </main>
 
+    <article id="photo-booking" class="card card-light">
+      <p class="card-eyebrow">摄影预约</p>
+      <h2>留下你的拍摄意向</h2>
+      <p>如果你对我的摄影风格感兴趣，欢迎填写以下信息，我会尽快与你联系。</p>
+      <form class="booking-form" action="#" novalidate>
+        <div class="booking-field" id="bookingFieldName">
+          <label for="bookingName">姓名</label>
+          <input
+            type="text"
+            id="bookingName"
+            name="name"
+            placeholder="请输入你的姓名"
+            autocomplete="name"
+          >
+          <p class="booking-error" id="bookingNameError" role="alert"></p>
+        </div>
+        <div class="booking-field" id="bookingFieldContact">
+          <label for="bookingContact">联系方式</label>
+          <input
+            type="text"
+            id="bookingContact"
+            name="contact"
+            placeholder="手机号或微信号"
+            autocomplete="tel"
+          >
+          <p class="booking-error" id="bookingContactError" role="alert"></p>
+        </div>
+        <div class="booking-field" id="bookingFieldNeeds">
+          <label for="bookingNeeds">拍摄需求</label>
+          <textarea
+            id="bookingNeeds"
+            name="needs"
+            placeholder="例如：人像写真、户外骑行、活动跟拍等"
+          ></textarea>
+          <p class="booking-error" id="bookingNeedsError" role="alert"></p>
+        </div>
+        <div class="booking-submit-wrap">
+          <button type="button" class="booking-submit">提交</button>
+        </div>
+      </form>
+    </article>
+
+
   <section class="like-section">
     <p>喜欢这个页面？</p>
     <div class="vote-actions">
@@ -622,6 +892,24 @@
       <p class="copyright">用好奇心与 AI 制作 · 中国</p>
     </div>
   </footer>
+
+  <!-- 预约成功弹窗 -->
+  <div
+    class="booking-modal"
+    id="bookingSuccessModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="bookingModalTitle"
+    aria-hidden="true"
+  >
+    <div class="booking-modal-backdrop" id="bookingModalBackdrop"></div>
+    <div class="booking-modal-dialog">
+      <div class="booking-modal-icon" aria-hidden="true">✓</div>
+      <h3 class="booking-modal-title" id="bookingModalTitle">预约提交成功</h3>
+      <p class="booking-modal-message">我们会尽快联系您</p>
+      <button type="button" class="booking-modal-btn" id="bookingModalClose">知道了</button>
+    </div>
+  </div>
 
   <script>
   (function () {
@@ -705,6 +993,103 @@
       }
       updateLikeCount();
     });
+
+    /* ========== 摄影预约表单 ========== */
+
+    var bookingSubmitBtn = document.querySelector(".booking-submit");
+    var bookingItems = [
+      {
+        key: "name",
+        input: document.getElementById("bookingName"),
+        field: document.getElementById("bookingFieldName"),
+        errorEl: document.getElementById("bookingNameError"),
+        message: "请输入姓名"
+      },
+      {
+        key: "contact",
+        input: document.getElementById("bookingContact"),
+        field: document.getElementById("bookingFieldContact"),
+        errorEl: document.getElementById("bookingContactError"),
+        message: "请输入联系方式"
+      },
+      {
+        key: "needs",
+        input: document.getElementById("bookingNeeds"),
+        field: document.getElementById("bookingFieldNeeds"),
+        errorEl: document.getElementById("bookingNeedsError"),
+        message: "请输入拍摄需求"
+      }
+    ];
+
+    /* 清除单个字段的错误状态 */
+    function clearBookingError(item) {
+      item.field.classList.remove("is-error", "is-shake");
+      item.errorEl.textContent = "";
+    }
+
+    /* 显示单个字段的错误：红框 + 抖动 + 提示文字 */
+    function showBookingError(item) {
+      item.field.classList.remove("is-shake");
+      void item.field.offsetWidth;
+      item.field.classList.add("is-error", "is-shake");
+      item.errorEl.textContent = item.message;
+      item.input.focus();
+    }
+
+    /* 用户开始输入时，自动清除该字段错误状态 */
+    bookingItems.forEach(function (item) {
+      item.input.addEventListener("input", function () {
+        clearBookingError(item);
+      });
+
+      item.input.addEventListener("animationend", function () {
+        item.field.classList.remove("is-shake");
+      });
+    });
+
+    /* 预约成功弹窗 */
+    var bookingSuccessModal = document.getElementById("bookingSuccessModal");
+    var bookingModalClose = document.getElementById("bookingModalClose");
+    var bookingModalBackdrop = document.getElementById("bookingModalBackdrop");
+
+    function openBookingSuccessModal() {
+      bookingSuccessModal.classList.add("is-open");
+      bookingSuccessModal.setAttribute("aria-hidden", "false");
+      bookingModalClose.focus();
+    }
+
+    function closeBookingSuccessModal() {
+      bookingSuccessModal.classList.remove("is-open");
+      bookingSuccessModal.setAttribute("aria-hidden", "true");
+    }
+
+    bookingModalClose.addEventListener("click", closeBookingSuccessModal);
+    bookingModalBackdrop.addEventListener("click", closeBookingSuccessModal);
+
+    function submitBooking() {
+      var name = document.getElementById("bookingName").value.trim();
+      var contact = document.getElementById("bookingContact").value.trim();
+      var needs = document.getElementById("bookingNeeds").value.trim();
+
+      if (name === "") {
+        showBookingError(bookingItems[0]);
+        return;
+      }
+
+      if (contact === "") {
+        showBookingError(bookingItems[1]);
+        return;
+      }
+
+      if (needs === "") {
+        showBookingError(bookingItems[2]);
+        return;
+      }
+
+      openBookingSuccessModal();
+    }
+
+    bookingSubmitBtn.addEventListener("click", submitBooking);
 
     /* ========== 联系方式模块 ========== */
 

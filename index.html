@@ -10,7 +10,7 @@
       --text: #1d1d1f;
       --text-secondary: #6e6e73;
       --link: #0066cc;
-      --nav-height: 44px;
+      --nav-height: 52px;
       --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
@@ -33,47 +33,342 @@
       overflow-x: hidden;
     }
 
-    /* —— 导航 —— */
-    nav {
+    /* —— 导航（影视飓风风格）—— */
+    .site-nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       height: var(--nav-height);
-      background: rgba(251, 251, 253, 0.72);
+      z-index: 1000;
+      background: transparent;
+      transition: background 0.35s var(--ease), border-color 0.35s var(--ease),
+        box-shadow 0.35s var(--ease);
+    }
+
+    .site-nav.is-scrolled {
+      background: rgba(251, 251, 253, 0.82);
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-      z-index: 1000;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 28px;
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 36px;
     }
 
-    nav ul {
-      list-style: none;
+    .nav-brand {
       display: flex;
-      gap: 28px;
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: -0.01em;
-    }
-
-    nav a {
-      color: var(--text);
+      align-items: center;
+      gap: 10px;
       text-decoration: none;
-      opacity: 0.88;
+      flex-shrink: 0;
       transition: opacity 0.3s var(--ease);
     }
 
-    nav a:hover {
-      opacity: 1;
+    .nav-brand:hover {
+      opacity: 0.88;
     }
 
-    nav .logo {
+    .nav-logo {
+      width: 28px;
+      height: 28px;
+      display: block;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      transition: filter 0.35s var(--ease);
+    }
+
+    .site-nav.is-scrolled .nav-logo {
+      filter: none;
+    }
+
+    .nav-brand-text {
+      font-size: 15px;
       font-weight: 600;
-      font-size: 14px;
       letter-spacing: -0.02em;
+      color: #fff;
+      transition: color 0.35s var(--ease);
+    }
+
+    .site-nav.is-scrolled .nav-brand-text {
+      color: var(--text);
+    }
+
+    .nav-menu {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-link {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color: rgba(255, 255, 255, 0.82);
+      text-decoration: none;
+      padding: 6px 2px;
+      transition: color 0.3s var(--ease), transform 0.3s var(--ease),
+        opacity 0.3s var(--ease);
+      transform-origin: center center;
+    }
+
+    .site-nav.is-scrolled .nav-link {
+      color: rgba(29, 29, 31, 0.78);
+    }
+
+    .nav-item:hover > .nav-link {
+      color: #fff;
+      opacity: 1;
+      transform: scale(1.06);
+    }
+
+    .site-nav.is-scrolled .nav-item:hover > .nav-link {
+      color: var(--text);
+    }
+
+    /* 下拉框（占位，以后可填入内容） */
+    .nav-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      min-width: 168px;
+      min-height: 48px;
+      padding: 8px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.14);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.28s var(--ease), transform 0.28s var(--ease),
+        visibility 0.28s var(--ease);
+    }
+
+    .nav-item:hover .nav-dropdown {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .nav-dropdown-placeholder {
+      font-size: 12px;
+      color: #86868b;
+      text-align: center;
+      padding: 10px 12px;
+      letter-spacing: -0.01em;
+    }
+
+    /* 「联系我」全宽 Mega 下拉（参考 DJI 生态菜单布局） */
+    .nav-mega-wrap {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-item--mega:hover > .nav-link,
+    .nav-mega-wrap.is-open > .nav-link {
+      box-shadow: inset 0 -2px 0 0 currentColor;
+    }
+
+    .nav-mega-dropdown {
+      position: fixed;
+      top: var(--nav-height);
+      left: 0;
+      right: 0;
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.28s var(--ease), visibility 0.28s var(--ease);
+    }
+
+    /* 不可见 hover 桥梁：向上延伸进导航栏，不占视觉空间 */
+    .nav-mega-dropdown::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 0;
+      right: 0;
+      height: 12px;
+    }
+
+    .nav-mega-dropdown.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .nav-mega-panel {
+      position: relative;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .nav-mega-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      align-items: stretch;
+    }
+
+    .nav-contact-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 36px 20px;
+      text-decoration: none;
+      color: var(--text);
+      border-right: 1px solid rgba(0, 0, 0, 0.08);
+      transition: background 0.3s var(--ease);
+    }
+
+    .nav-contact-col:last-child {
+      border-right: none;
+    }
+
+    .nav-contact-col:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    span.nav-contact-col {
+      cursor: default;
+    }
+
+    .nav-contact-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--text-secondary);
+      transition: color 0.3s var(--ease), transform 0.3s var(--ease);
+    }
+
+    .nav-contact-col:hover .nav-contact-icon {
+      color: var(--text);
+      transform: scale(1.05);
+    }
+
+    .nav-contact-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .nav-contact-account {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--text-secondary);
+      transition: color 0.3s var(--ease);
+    }
+
+    .nav-contact-col:hover .nav-contact-account {
+      color: var(--text);
+    }
+
+    /* 「我的项目」Mega 下拉（左列表 + 右介绍，参考 Insta360） */
+    .nav-projects-inner {
+      min-height: 260px;
+      align-items: stretch;
+    }
+
+    .nav-projects-list {
+      width: 220px;
+      flex-shrink: 0;
+      padding: 24px 12px 24px 24px;
+      border-right: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .nav-projects-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #86868b;
+      margin-bottom: 12px;
+      padding: 0 14px;
+    }
+
+    .nav-projects-list ul {
+      list-style: none;
+    }
+
+    .nav-project-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      color: var(--text);
+      font-family: inherit;
+      transition: background 0.25s var(--ease), color 0.25s var(--ease);
+    }
+
+    .nav-project-item:hover,
+    .nav-project-item.is-active {
+      background: rgba(0, 0, 0, 0.06);
+      color: var(--text);
+    }
+
+    .nav-projects-detail {
+      flex: 1;
+      padding: 24px 32px 32px;
+      min-width: 0;
+    }
+
+    .nav-project-panel {
+      display: none;
+      animation: navProjectFade 0.25s var(--ease);
+    }
+
+    .nav-project-panel.is-visible {
+      display: block;
+    }
+
+    @keyframes navProjectFade {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .nav-project-desc {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      min-height: 48px;
     }
 
     /* —— Hero —— */
@@ -85,14 +380,17 @@
       justify-content: center;
       text-align: center;
       padding: calc(var(--nav-height) + 48px) 24px 80px;
-      background: linear-gradient(180deg, #f5f5f7 0%, var(--bg) 60%);
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.55) 100%),
+        linear-gradient(145deg, #1a2a3a 0%, #2d4a5e 40%, #1a2836 100%);
+      color: #f5f5f7;
     }
 
     .hero-eyebrow {
       font-size: 21px;
       font-weight: 600;
       letter-spacing: 0.011em;
-      color: var(--text-secondary);
+      color: rgba(245, 245, 247, 0.72);
       margin-bottom: 8px;
       opacity: 0;
       animation: fadeUp 1s var(--ease) 0.2s forwards;
@@ -112,7 +410,7 @@
       font-size: clamp(21px, 3vw, 28px);
       font-weight: 400;
       letter-spacing: 0.004em;
-      color: var(--text-secondary);
+      color: rgba(245, 245, 247, 0.72);
       max-width: 520px;
       line-height: 1.4;
       margin-bottom: 24px;
@@ -131,7 +429,7 @@
 
     .cta-links a {
       font-size: 21px;
-      color: var(--link);
+      color: #7eb8e8;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
@@ -728,9 +1026,60 @@
     }
 
     @media (max-width: 734px) {
-      nav ul {
+      .nav-inner {
+        padding: 0 16px;
         gap: 16px;
-        font-size: 11px;
+      }
+
+      .nav-menu {
+        gap: 18px;
+      }
+
+      .nav-link {
+        font-size: 12px;
+      }
+
+      .nav-brand-text {
+        font-size: 14px;
+      }
+
+      .nav-dropdown {
+        min-width: 140px;
+      }
+
+      .nav-mega-inner {
+        flex-wrap: wrap;
+      }
+
+      .nav-contact-col {
+        flex: 1 1 50%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 28px 16px;
+      }
+
+      .nav-contact-col:nth-child(odd) {
+        border-right: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .nav-contact-col:nth-last-child(-n + 2) {
+        border-bottom: none;
+      }
+
+      .nav-projects-inner {
+        flex-direction: column;
+        min-height: auto;
+      }
+
+      .nav-projects-list {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 20px 16px;
+      }
+
+      .nav-projects-detail {
+        padding: 20px 16px 24px;
       }
 
       .card {
@@ -741,13 +1090,113 @@
 </head>
 <body>
 
-  <nav>
-    <ul>
-      <li><a href="#" class="logo">盈缺</a></li>
-      <li><a href="#about">关于</a></li>
-      <li><a href="#interests">兴趣</a></li>
-      <li><a href="#story">故事</a></li>
-    </ul>
+  <nav class="site-nav" id="siteNav">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">
+        <!-- 替换 Logo：只需把 src 改成你的图片路径 -->
+        <img src="assets/logo-cat.svg" alt="盈缺 Logo" class="nav-logo">
+        <span class="nav-brand-text">盈缺</span>
+      </a>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#photography" class="nav-link">摄影作品</a>
+          <div class="nav-dropdown" aria-label="摄影作品子菜单">
+            <p class="nav-dropdown-placeholder">即将推出</p>
+          </div>
+        </li>
+        <li class="nav-item nav-item--mega">
+          <div class="nav-mega-wrap" id="projectsMegaWrap">
+            <a href="#projects" class="nav-link">我的项目</a>
+            <div class="nav-mega-dropdown" id="projectsMegaDropdown" aria-label="我的项目菜单">
+              <div class="nav-mega-panel">
+                <div class="nav-mega-inner nav-projects-inner">
+                  <aside class="nav-projects-list">
+                    <p class="nav-projects-label">项目列表</p>
+                    <ul>
+                      <li>
+                        <button
+                          type="button"
+                          class="nav-project-item is-active"
+                          data-project="agen_youtube"
+                        >agen_youtube</button>
+                      </li>
+                    </ul>
+                  </aside>
+                  <div class="nav-projects-detail">
+                    <div
+                      class="nav-project-panel is-visible"
+                      data-project-panel="agen_youtube"
+                    >
+                      <p class="nav-project-desc" id="projectDescAgenYoutube"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item nav-item--mega">
+          <div class="nav-mega-wrap" id="contactMegaWrap">
+            <a href="#contact" class="nav-link">联系我</a>
+            <div class="nav-mega-dropdown" id="contactMegaDropdown" aria-label="联系方式菜单">
+            <div class="nav-mega-panel">
+              <div class="nav-mega-inner">
+                <a
+                  href="https://www.douyin.com/user/douyin_demo"
+                  class="nav-contact-col"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="抖音 douyin_demo"
+                >
+                  <span class="nav-contact-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M12 2c1.5 3.5 4 5.2 8 5.8v2.2c-3.2-.4-5.6 1.2-7.2 4.5 1.8-1 3.5-1.2 5.2-.5v2.1c-2-.6-3.8-.2-5.5 1.5 1.5 3.2 4.2 5 8.5 5.4V24c-6.2-.5-10.5-4.5-11.5-10.8 2.2 1.5 4.5 2.2 7 2.1V2z"/>
+                    </svg>
+                  </span>
+                  <span class="nav-contact-account">douyin_demo</span>
+                </a>
+                <a
+                  href="https://space.bilibili.com/bilibili_demo"
+                  class="nav-contact-col"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="B站 bilibili_demo"
+                >
+                  <span class="nav-contact-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M4 6h2l1-2h10l1 2h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm2 4v8h12V10H6zm2 2h2v4H8v-4zm6 0h2v4h-2v-4z"/>
+                    </svg>
+                  </span>
+                  <span class="nav-contact-account">bilibili_demo</span>
+                </a>
+                <span class="nav-contact-col" aria-label="微信 wechat_demo">
+                  <span class="nav-contact-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M8.5 4C4.9 4 2 6.1 2 8.8c0 1.5.8 2.8 2.1 3.7L3 17l4.2-1.1c.7.2 1.5.3 2.3.3.4 0 .8 0 1.2-.1-.3-.8-.5-1.6-.5-2.5 0-3.4 3.4-6.2 7.5-6.2.3 0 .7 0 1 .1C17.2 5.5 13.2 4 8.5 4zm-2 4.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm5 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM16 10c-3.6 0-6.5 2.2-6.5 4.8S12.4 19.6 16 19.6c.8 0 1.5-.1 2.2-.3L22 20l-1.3-3.5c1-.9 1.6-2.1 1.6-3.4C22.3 12.2 19.4 10 16 10zm-2.5 3.8a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6zm5 0a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6z"/>
+                    </svg>
+                  </span>
+                  <span class="nav-contact-account">wechat_demo</span>
+                </span>
+                <a
+                  href="mailto:hello@yingque.com"
+                  class="nav-contact-col"
+                  aria-label="邮箱 hello@yingque.com"
+                >
+                  <span class="nav-contact-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                      <rect x="3" y="5" width="18" height="14" rx="2"/>
+                      <path d="M3 7l9 6 9-6"/>
+                    </svg>
+                  </span>
+                  <span class="nav-contact-account">hello@yingque.com</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </nav>
 
   <header class="hero">
@@ -755,20 +1204,20 @@
     <h1>你好，我是盈缺。</h1>
     <p class="tagline">这是我做的第一个网页。没有任何程序员经验——全靠 AI 一起完成。</p>
     <div class="cta-links">
-      <a href="#about">了解更多</a>
-      <a href="#interests">探索兴趣</a>
+      <a href="#projects">了解更多</a>
+      <a href="#photography">探索兴趣</a>
     </div>
   </header>
 
   <main class="sections">
-    <article id="about" class="card card-light">
+    <article id="projects" class="card card-light">
       <p class="card-eyebrow">关于我</p>
       <h2>从零开始，<br>但已经出发。</h2>
       <p>每一个伟大的产品，都始于一个简单的想法。这个网页就是我的第一步——简洁、专注、恰到好处。</p>
       <a href="#story" class="card-link">阅读我的故事 ›</a>
     </article>
 
-    <article id="interests" class="card card-gradient">
+    <article id="photography" class="card card-gradient">
       <p class="card-eyebrow">我的兴趣</p>
       <h2>热爱，<br>定义了我。</h2>
       <p>生活不止于屏幕。这些是我真正在意的事情。</p>
@@ -926,6 +1375,70 @@
     );
     cards.forEach(function (card) {
       observer.observe(card);
+    });
+
+    /* 导航：滚出 Hero 后切换为浅色毛玻璃样式 */
+    var siteNav = document.getElementById("siteNav");
+    var heroSection = document.querySelector(".hero");
+
+    function updateNavStyle() {
+      var navHeight = parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue("--nav-height"),
+        10
+      ) || 52;
+      siteNav.classList.toggle("is-scrolled", window.scrollY > heroSection.offsetHeight - navHeight);
+    }
+
+    window.addEventListener("scroll", updateNavStyle, { passive: true });
+    updateNavStyle();
+
+    /* Mega 菜单：鼠标移入/移出时保持打开，避免断层闪烁 */
+    function setupMegaMenu(wrapId, dropdownId) {
+      var wrap = document.getElementById(wrapId);
+      var dropdown = document.getElementById(dropdownId);
+      var timer = null;
+
+      function openMega() {
+        clearTimeout(timer);
+        wrap.classList.add("is-open");
+        dropdown.classList.add("is-open");
+      }
+
+      function closeMega() {
+        timer = setTimeout(function () {
+          wrap.classList.remove("is-open");
+          dropdown.classList.remove("is-open");
+        }, 120);
+      }
+
+      wrap.addEventListener("mouseenter", openMega);
+      wrap.addEventListener("mouseleave", closeMega);
+      dropdown.addEventListener("mouseenter", openMega);
+      dropdown.addEventListener("mouseleave", closeMega);
+    }
+
+    setupMegaMenu("contactMegaWrap", "contactMegaDropdown");
+    setupMegaMenu("projectsMegaWrap", "projectsMegaDropdown");
+
+    /* 「我的项目」：悬停项目名，右侧切换介绍 */
+    var projectItems = document.querySelectorAll(".nav-project-item");
+    var projectPanels = document.querySelectorAll("[data-project-panel]");
+
+    projectItems.forEach(function (item) {
+      item.addEventListener("mouseenter", function () {
+        var key = item.getAttribute("data-project");
+
+        projectItems.forEach(function (el) {
+          el.classList.toggle("is-active", el === item);
+        });
+
+        projectPanels.forEach(function (panel) {
+          panel.classList.toggle(
+            "is-visible",
+            panel.getAttribute("data-project-panel") === key
+          );
+        });
+      });
     });
 
     var likeBtn = document.getElementById("likeBtn");

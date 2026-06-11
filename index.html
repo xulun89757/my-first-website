@@ -142,9 +142,9 @@
     /* 下拉框（占位，以后可填入内容） */
     .nav-dropdown {
       position: absolute;
-      top: calc(100% + 10px);
+      top: 100%;
       left: 50%;
-      transform: translateX(-50%) translateY(6px);
+      transform: translateX(-50%);
       min-width: 168px;
       min-height: 48px;
       padding: 8px;
@@ -161,11 +161,23 @@
         visibility 0.28s var(--ease);
     }
 
-    .nav-item:hover .nav-dropdown {
+    /* 向上延伸的不可见 hover 区，消除导航与下拉之间的断层 */
+    .nav-dropdown::before {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160px;
+      height: 20px;
+    }
+
+    .nav-item:hover .nav-dropdown,
+    .nav-dropdown.is-open {
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
-      transform: translateX(-50%) translateY(0);
+      transform: translateX(-50%);
     }
 
     .nav-dropdown-placeholder {
@@ -205,10 +217,10 @@
     .nav-mega-dropdown::before {
       content: "";
       position: absolute;
-      top: -12px;
+      top: -24px;
       left: 0;
       right: 0;
-      height: 12px;
+      height: 24px;
     }
 
     .nav-mega-dropdown.is-open {
@@ -1436,33 +1448,84 @@
     window.addEventListener("scroll", updateNavStyle, { passive: true });
     updateNavStyle();
 
-    /* Mega 菜单：鼠标移入/移出时保持打开，避免断层闪烁 */
+    /* Mega / 普通下拉：鼠标移入移出时保持打开，避免断层闪烁 */
+    var NAV_DROPDOWN_CLOSE_DELAY = 280;
+
+    function isInsideNavMenu(container, target) {
+      return !!(target && container && container.contains(target));
+    }
+
     function setupMegaMenu(wrapId, dropdownId) {
       var wrap = document.getElementById(wrapId);
       var dropdown = document.getElementById(dropdownId);
       var timer = null;
 
-      function openMega() {
+      function openMenu() {
         clearTimeout(timer);
         wrap.classList.add("is-open");
         dropdown.classList.add("is-open");
       }
 
-      function closeMega() {
+      function scheduleClose() {
+        clearTimeout(timer);
         timer = setTimeout(function () {
           wrap.classList.remove("is-open");
           dropdown.classList.remove("is-open");
-        }, 120);
+        }, NAV_DROPDOWN_CLOSE_DELAY);
       }
 
-      wrap.addEventListener("mouseenter", openMega);
-      wrap.addEventListener("mouseleave", closeMega);
-      dropdown.addEventListener("mouseenter", openMega);
-      dropdown.addEventListener("mouseleave", closeMega);
+      function handleLeave(event) {
+        var next = event.relatedTarget;
+        if (isInsideNavMenu(wrap, next) || isInsideNavMenu(dropdown, next)) {
+          return;
+        }
+        scheduleClose();
+      }
+
+      wrap.addEventListener("mouseenter", openMenu);
+      dropdown.addEventListener("mouseenter", openMenu);
+      wrap.addEventListener("mouseleave", handleLeave);
+      dropdown.addEventListener("mouseleave", handleLeave);
+    }
+
+    function setupNavDropdown(itemSelector) {
+      var item = document.querySelector(itemSelector);
+      if (!item) {
+        return;
+      }
+
+      var link = item.querySelector(".nav-link");
+      var dropdown = item.querySelector(".nav-dropdown");
+      var timer = null;
+
+      function openMenu() {
+        clearTimeout(timer);
+        dropdown.classList.add("is-open");
+      }
+
+      function scheduleClose() {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          dropdown.classList.remove("is-open");
+        }, NAV_DROPDOWN_CLOSE_DELAY);
+      }
+
+      function handleLeave(event) {
+        var next = event.relatedTarget;
+        if (isInsideNavMenu(item, next)) {
+          return;
+        }
+        scheduleClose();
+      }
+
+      link.addEventListener("mouseenter", openMenu);
+      dropdown.addEventListener("mouseenter", openMenu);
+      item.addEventListener("mouseleave", handleLeave);
     }
 
     setupMegaMenu("contactMegaWrap", "contactMegaDropdown");
     setupMegaMenu("projectsMegaWrap", "projectsMegaDropdown");
+    setupNavDropdown('.nav-item:not(.nav-item--mega)');
 
     /* 「我的项目」：悬停项目名，右侧切换介绍 */
     var projectItems = document.querySelectorAll(".nav-project-item");

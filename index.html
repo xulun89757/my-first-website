@@ -369,6 +369,29 @@
       line-height: 1.6;
       color: var(--text-secondary);
       min-height: 48px;
+      margin-bottom: 16px;
+    }
+
+    .nav-project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--link);
+      text-decoration: none;
+      transition: opacity 0.3s var(--ease);
+    }
+
+    .nav-project-link:hover {
+      text-decoration: underline;
+      opacity: 0.88;
+    }
+
+    .nav-project-link::after {
+      content: "›";
+      font-size: 18px;
+      line-height: 1;
     }
 
     /* —— Hero —— */
@@ -1120,6 +1143,13 @@
                           data-project="agen_youtube"
                         >agen_youtube</button>
                       </li>
+                      <li>
+                        <button
+                          type="button"
+                          class="nav-project-item"
+                          data-project="worldcup"
+                        >worldcup</button>
+                      </li>
                     </ul>
                   </aside>
                   <div class="nav-projects-detail">
@@ -1128,6 +1158,20 @@
                       data-project-panel="agen_youtube"
                     >
                       <p class="nav-project-desc" id="projectDescAgenYoutube"></p>
+                    </div>
+                    <div
+                      class="nav-project-panel"
+                      data-project-panel="worldcup"
+                    >
+                      <p class="nav-project-desc">
+                        一个用 ELO、真实赔率和 AI 分析辅助判断世界杯比赛价值机会的数据看板。
+                      </p>
+                      <a
+                        href="https://worldcup.yingque.me/"
+                        class="nav-project-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >访问 worldcup</a>
                     </div>
                   </div>
                 </div>

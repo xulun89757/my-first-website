@@ -1,1 +1,5 @@
 .DS_Store
+# 本地 Release 笔记（不上传 GitHub）
+notes/
+docs/releases/
+RELEASE_*.md
